@@ -81,76 +81,62 @@
       }
     </style>
 
-    <script>
-      let input = "";
-      const correctPasscode = "2029"; // change passcode if needed
-
-      function addDigit(digit) {
-        if (input.length < 6) { 
-          input += digit;
-          document.getElementById("passcode").value = input.replace(/./g, "•");
-        }
-      }
-
-      function clearPasscode() {
-        input = input.slice(0, -1);
-        document.getElementById("passcode").value = input.replace(/./g, "•");
-      }
-
-      function checkPasscode() {
-        const status = document.getElementById("statusMessage");
-        if (input === correctPasscode) {
-          // ✅ Set session token
-          sessionStorage.setItem("authToken", "granted");
-
-          status.style.display = "block";
-          status.textContent = "Unlocked!";
-          status.style.color = "lightgreen";
-
-          setTimeout(() => {
-            window.location.href = "main.html";
-          }, 1000);
-        } else {
-          status.style.display = "block"; 
-          status.textContent = "Wrong passcode!";
-          status.style.color = "red";
-
-          input = "";
-          document.getElementById("passcode").value = "";
-        }
-      }
-
-      // ✅ Keyboard support
-      document.addEventListener("keydown", function(event) {
-        if (!isNaN(event.key) && event.key !== " ") {
-          addDigit(event.key);
-        } else if (event.key === "Backspace") {
-          clearPasscode();
-        } else if (event.key === "Enter") {
-          checkPasscode();
-        }
-      });
-    </script>
 <script>
+let input = "";
+const correctPasscode = "2029"; // change passcode if needed
+
+function addDigit(digit) {
+  if (input.length < 6) { 
+    input += digit;
+    document.getElementById("passcode").value = input.replace(/./g, "•");
+  }
+}
+
+function clearPasscode() {
+  input = input.slice(0, -1);
+  document.getElementById("passcode").value = input.replace(/./g, "•");
+}
+
 function checkPasscode() {
-  const correct = "2029"; // your passcode
-  if (input === correct) {
-    // 🔑 Generate token (time-based + random)
+  const status = document.getElementById("statusMessage");
+
+  if (input === correctPasscode) {
+    // 🔑 Generate a token + signature
     const token = btoa(Date.now().toString() + Math.random().toString());
     sessionStorage.setItem("authToken", token);
-
-    // Optional: also store a small signature so main.html knows it’s legit
     sessionStorage.setItem("authSignature", "jouyuss-secret");
 
-    // Redirect
-    window.location.href = "main.html";
+    // ✅ Show success
+    status.style.display = "block";
+    status.textContent = "Unlocked!";
+    status.style.color = "lightgreen";
+
+    setTimeout(() => {
+      window.location.href = "main.html";
+    }, 1000);
   } else {
-    alert("Wrong passcode!");
+    // ❌ Wrong passcode
+    status.style.display = "block"; 
+    status.textContent = "Wrong passcode!";
+    status.style.color = "red";
+
     input = "";
     document.getElementById("passcode").value = "";
   }
 }
+
+// ✅ Keyboard support
+document.addEventListener("keydown", function(event) {
+  if (!isNaN(event.key) && event.key !== " ") {
+    addDigit(event.key);
+  } else if (event.key === "Backspace") {
+    clearPasscode();
+  } else if (event.key === "Enter") {
+    checkPasscode();
+  }
+});
 </script>
+
 
   </body>
 </html>
