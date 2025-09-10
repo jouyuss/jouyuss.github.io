@@ -83,10 +83,10 @@
 
 <script>
 let input = "";
-const correctPasscode = "2029"; // change passcode if needed
+const correctPasscode = "2029";
 
 function addDigit(digit) {
-  if (input.length < 6) { 
+  if (input.length < 6) {
     input += digit;
     document.getElementById("passcode").value = input.replace(/./g, "•");
   }
@@ -101,12 +101,11 @@ function checkPasscode() {
   const status = document.getElementById("statusMessage");
 
   if (input === correctPasscode) {
-    // 🔑 Generate a token + signature
+    // ✅ Store both token + signature
     const token = btoa(Date.now().toString() + Math.random().toString());
     sessionStorage.setItem("authToken", token);
     sessionStorage.setItem("authSignature", "jouyuss-secret");
 
-    // ✅ Show success
     status.style.display = "block";
     status.textContent = "Unlocked!";
     status.style.color = "lightgreen";
@@ -115,8 +114,7 @@ function checkPasscode() {
       window.location.href = "main.html";
     }, 1000);
   } else {
-    // ❌ Wrong passcode
-    status.style.display = "block"; 
+    status.style.display = "block";
     status.textContent = "Wrong passcode!";
     status.style.color = "red";
 
@@ -125,8 +123,8 @@ function checkPasscode() {
   }
 }
 
-// ✅ Keyboard support
-document.addEventListener("keydown", function(event) {
+// Keyboard support
+document.addEventListener("keydown", (event) => {
   if (!isNaN(event.key) && event.key !== " ") {
     addDigit(event.key);
   } else if (event.key === "Backspace") {
@@ -136,6 +134,7 @@ document.addEventListener("keydown", function(event) {
   }
 });
 </script>
+
 
 
   </body>
