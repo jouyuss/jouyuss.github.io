@@ -771,17 +771,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
-
-
+<!-- fixed loading screen -->
 	  <script>
-window.addEventListener("load", () => {
-  document.querySelector(".preloader").style.display = "none";
-});
-</script>
-
-
-
-<script>
 document.addEventListener("DOMContentLoaded", () => {
   const loader = document.querySelector(".preloader");
 
@@ -799,18 +790,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = sessionStorage.getItem("authToken");
   const signature = sessionStorage.getItem("authSignature");
 
-  // ✅ Must have both values to continue
-  if (!token || signature !== "jouyuss-secret") {
-    blockAccess();
-  } else {
-    // Token looks valid, finish loading normally
-    window.addEventListener("load", () => {
+  window.addEventListener("load", () => {
+    if (!token || signature !== "jouyuss-secret") {
+      blockAccess(); // ❌ bad session, show redirect
+    } else {
       setTimeout(() => {
-        loader.style.display = "none";
+        loader.style.display = "none"; // ✅ good session, hide preloader
       }, 1000);
-    });
-  }
+    }
+  });
 });
 </script>
+
   </body>
 </html>
